@@ -8,6 +8,7 @@
 ![Delta Lake](https://img.shields.io/badge/Delta%20Lake-003366?style=for-the-badge&logo=apachespark&logoColor=white)
 
 [![Ver Dashboard ao Vivo](https://img.shields.io/badge/▶%20Ver%20Dashboard%20ao%20Vivo-0D1B2A?style=for-the-badge&logo=powerbi&logoColor=00B4D8)](https://app.powerbi.com/view?r=eyJrIjoiYmFkZWEzZGYtYmE4NC00NzI4LWFkNGEtZDlhNzA2ZTU1MjJmIiwidCI6IjY1OWNlMmI4LTA3MTQtNDE5OC04YzM4LWRjOWI2MGFhYmI1NyJ9)
+[![Download PBIX](https://img.shields.io/badge/⬇%20Download%20PBIX-0078D4?style=for-the-badge&logo=microsoftonedrive&logoColor=white)](https://escolatrabalhador4-my.sharepoint.com/personal/diogoferreira1290_escoladotrabalhador40_com_br/Documents/Gest%C3%A3o%20de%20Performance%20de%20Marketing.pbix)
 
 </div>
 
@@ -90,16 +91,6 @@ Funil de Conversão · ROAS vs CTR por Canal · Engajamento por Conteúdo · Map
 
 ---
 
-## 👤 Autor
-
-**Diogo Campos Ferreira** · Customer Intelligence Analyst
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/diogo1290)
-[![Portfolio](https://img.shields.io/badge/Portfolio-0D1B2A?style=flat&logo=vercel&logoColor=00B4D8)](https://diogoportfolio.lovable.app)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/diogo1290)
-
----
-
 ## 🐍 Geração de Dados — Python
 
 ```python
@@ -167,13 +158,11 @@ SELECT
     CAST(cliques        AS INT),
     CAST(conversoes     AS INT),
 
-    -- Engajamento recalculado da fonte
     (curtidas + comentarios + compartilhamentos) AS total_engajamentos,
 
     ROUND(CAST(custo_brl   AS DOUBLE), 2) AS custo_brl,
     ROUND(CAST(receita_brl AS DOUBLE), 2) AS receita_brl,
 
-    -- Métricas derivadas com divisão segura (zeros → NULL)
     CASE WHEN impressoes > 0
         THEN ROUND(cliques / impressoes * 100, 4) ELSE NULL END AS ctr_pct,
 
@@ -203,3 +192,13 @@ SELECT
     COUNT(CASE WHEN cpa_brl IS NULL THEN 1 END)  AS nulos_cpa
 FROM default.fato_engajamento;
 ```
+
+---
+
+## 👤 Autor
+
+**Diogo Campos Ferreira** · Customer Intelligence Analyst
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/diogo1290)
+[![Portfolio](https://img.shields.io/badge/Portfolio-0D1B2A?style=flat&logo=vercel&logoColor=00B4D8)](https://diogoportfolio.lovable.app)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/diogo1290)
