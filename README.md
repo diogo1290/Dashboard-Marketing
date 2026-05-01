@@ -51,27 +51,6 @@ Pipeline end-to-end analisando o desempenho de **9 canais digitais** — do prob
 
 ---
 
-## 📐 Medidas DAX
-
-```dax
-ROAS = DIVIDE([Receita Total], [Custo Total], 0)
-
-Crescimento YoY % =
-VAR Atual    = [Receita Total]
-VAR Anterior = CALCULATE([Receita Total], SAMEPERIODLASTYEAR(dim_data[data]))
-RETURN DIVIDE(Atual - Anterior, Anterior, BLANK())
-
-Rank Canal =
-RANKX(ALLSELECTED(dim_canal[canal]), [Receita Total], , DESC, DENSE)
-
-Score Canal =
-DIVIDE([ROAS],              MAXX(ALL(dim_canal), [ROAS]),              0) * 50 +
-DIVIDE([CTR %],             MAXX(ALL(dim_canal), [CTR %]),             0) * 30 +
-DIVIDE([Engagement Rate %], MAXX(ALL(dim_canal), [Engagement Rate %]), 0) * 20
-```
-
----
-
 ## 📊 Páginas do Dashboard
 
 **Página 1 — Visão Executiva**
