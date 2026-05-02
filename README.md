@@ -172,12 +172,3 @@ SELECT
 FROM default.fato_engajamento;
 ```
 
----
-
-## 👤 Autor
-
-**Diogo Campos Ferreira** · Customer Intelligence Analyst
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/diogo1290)
-[![Portfolio](https://img.shields.io/badge/Portfolio-0D1B2A?style=flat&logo=vercel&logoColor=00B4D8)](https://diogoportfolio.lovable.app)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/diogo1290)
