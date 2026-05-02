@@ -154,7 +154,7 @@ SELECT
         ELSE NULL END AS ctr_pct,
 
     CASE WHEN alcance > 0
-        THEN ROUND(CAST(curtidas + comentarios + compartilhamentos AS DOUBLE) / CAST(alcance AS DOUBLE) * 100, 4)
+        THEN ROUND(CAST((curtidas + comentarios + compartilhamentos) AS DOUBLE) / CAST(alcance AS DOUBLE) * 100, 4)
         ELSE NULL END AS eng_rate_pct,
 
     CASE WHEN cliques > 0
@@ -182,5 +182,3 @@ SELECT
     COUNT(CASE WHEN cpa_brl IS NULL THEN 1 END)  AS nulos_cpa
 FROM default.fato_engajamento;
 ```
-[![Portfolio](https://img.shields.io/badge/Portfolio-0D1B2A?style=flat&logo=vercel&logoColor=00B4D8)](https://diogoportfolio.lovable.app)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/diogo1290)
