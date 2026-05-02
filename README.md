@@ -54,23 +54,26 @@ Pipeline end-to-end analisando o desempenho de **9 canais digitais** — do prob
 ## 📊 Páginas do Dashboard
 
 **Página 1 — Visão Executiva**
-KPIs globais · Receita vs Custo mensal · Impressões por Canal · Top/Bottom Campanhas
+KPIs globais · Receita vs Custo mensal · Impressões por Canal · Bottom 5 Campanhas por ROAS
 
-**Página 2 — Análise de Performance**
-Funil de Conversão · ROAS vs CTR por Canal · Engajamento por Conteúdo · Mapa Regional
+**Página 2 — Eficiência dos Canais**
+Funil de Conversão · ROAS vs CTR por Canal · Engajamento por Tipo de Conteúdo · Mapa Regional · CTR vs CVR por Plataforma e Perfil de Audiência
 
 ---
 
 ## 💡 Principais Insights
 
-- **Email** tem o maior ROAS médio (7,0x) com o menor custo por clique
-- **TikTok** lidera em impressões mas apresenta o menor CVR
-- Maior gargalo do funil: **Alcance → Engajamento** (queda de 92% para 6%)
-- **Reels e Carrossel** são os formatos com maior Engagement Rate
+- **TikTok** lidera em impressões (1,9 Bi) mas com o menor CVR entre os canais
+- **ROAS geral de 4,29x** — acima da meta estabelecida de 4,00x
+- Maior gargalo do funil: **Alcance → Engajamento** (queda de 72,5% para 6,1%)
+- **Carrossel e Banner Display** são os formatos com maior Engagement Rate (6,14% e 6,13%)
+- **Meta** é a plataforma com melhor equilíbrio entre CTR (5,95%) e CVR (2,36%)
 
 ---
 
 ## 🐍 Geração de Dados — Python
+
+> ⚠️ Trecho ilustrativo. Script completo disponível em `scripts/gerar_dataset.py`.
 
 ```python
 import pandas as pd
@@ -101,6 +104,9 @@ for cid, p in canal_params.items():
     clk  = np.clip((imp * np.random.normal(p['ctr'], p['ctr']*0.3, n)).astype(int), 0, imp)
     cst  = ((imp / 1000.0) * p['cpm'] * np.random.uniform(0.85, 1.15, n)).round(2)
     rev  = np.clip((cst * np.random.normal(p['rm'], 0.5, n)).round(2), 0, None)
+    # Atribui às arrays globais
+    imp_a[mask] = imp;  alc_a[mask] = alc;  clk_a[mask] = clk
+    cst_a[mask] = cst;  rev_a[mask] = rev
 
 # Métricas derivadas
 ctr  = np.where(imp_a > 0, np.round(clk_a / imp_a * 100, 4), 0.0)
@@ -124,6 +130,7 @@ SELECT * FROM read_files(
 );
 
 -- 2. Tipagem, recálculo de métricas e zeros → NULL
+-- Nota: CAST para DOUBLE antes das divisões evita truncamento inteiro no Spark
 CREATE OR REPLACE TABLE default.fato_engajamento AS
 SELECT
     CAST(id_engajamento AS INT),
@@ -143,20 +150,24 @@ SELECT
     ROUND(CAST(receita_brl AS DOUBLE), 2) AS receita_brl,
 
     CASE WHEN impressoes > 0
-        THEN ROUND(cliques / impressoes * 100, 4) ELSE NULL END AS ctr_pct,
+        THEN ROUND(CAST(cliques AS DOUBLE) / CAST(impressoes AS DOUBLE) * 100, 4)
+        ELSE NULL END AS ctr_pct,
 
     CASE WHEN alcance > 0
-        THEN ROUND((curtidas + comentarios + compartilhamentos) / alcance * 100, 4)
+        THEN ROUND(CAST(curtidas + comentarios + compartilhamentos AS DOUBLE) / CAST(alcance AS DOUBLE) * 100, 4)
         ELSE NULL END AS eng_rate_pct,
 
     CASE WHEN cliques > 0
-        THEN ROUND(custo_brl / cliques, 2) ELSE NULL END AS cpc_brl,
+        THEN ROUND(CAST(custo_brl AS DOUBLE) / CAST(cliques AS DOUBLE), 2)
+        ELSE NULL END AS cpc_brl,
 
     CASE WHEN custo_brl > 0
-        THEN ROUND(receita_brl / custo_brl, 4) ELSE NULL END AS roas,
+        THEN ROUND(CAST(receita_brl AS DOUBLE) / CAST(custo_brl AS DOUBLE), 4)
+        ELSE NULL END AS roas,
 
     CASE WHEN conversoes > 0
-        THEN ROUND(custo_brl / conversoes, 2) ELSE NULL END AS cpa_brl
+        THEN ROUND(CAST(custo_brl AS DOUBLE) / CAST(conversoes AS DOUBLE), 2)
+        ELSE NULL END AS cpa_brl
 
 FROM default.fato_engajamento
 WHERE id_engajamento IS NOT NULL
@@ -171,4 +182,5 @@ SELECT
     COUNT(CASE WHEN cpa_brl IS NULL THEN 1 END)  AS nulos_cpa
 FROM default.fato_engajamento;
 ```
-
+[![Portfolio](https://img.shields.io/badge/Portfolio-0D1B2A?style=flat&logo=vercel&logoColor=00B4D8)](https://diogoportfolio.lovable.app)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/diogo1290)
